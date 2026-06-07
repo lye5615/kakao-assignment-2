@@ -51,7 +51,7 @@ export function TodoForm({ onAddTodo }) {
       </label>
       <textarea
         id="todoInput"
-        className="min-h-12 resize-y rounded-lg border border-white/20 bg-white/10 px-4 py-3 leading-normal outline-none focus:border-white/60"
+        className="min-h-12 resize-y rounded-lg border border-[var(--line-color)] bg-[var(--control-background)] px-4 py-3 leading-normal outline-none placeholder:text-[var(--subtle-text)] focus:border-[var(--primary-color)]"
         rows="1"
         placeholder={GUIDE_MESSAGES[guideIndex]}
         value={todoText}
@@ -60,10 +60,10 @@ export function TodoForm({ onAddTodo }) {
         onCompositionEnd={() => setIsComposingTodoText(false)}
         onKeyDown={handleTodoInputKeyDown}
       />
-      <button className="rounded-lg bg-[#672be0] font-bold text-white" type="submit">
+      <button className="rounded-lg bg-[var(--primary-color)] font-bold text-white shadow-[var(--primary-glow)]" type="submit">
         추가
       </button>
-      {message && <p className="text-sm font-bold text-[#ff6363] sm:col-span-2">{message}</p>}
+      {message && <p className="text-sm font-bold text-[var(--danger-color)] sm:col-span-2">{message}</p>}
     </form>
   );
 }

@@ -1,5 +1,41 @@
 @import "tailwindcss";
 
+:root {
+  --primary-color: #672be0;
+  --primary-dark: #5320bd;
+  --text-color: #f8f6ff;
+  --subtle-text: #c7bfdc;
+  --label-color: #d8ccff;
+  --line-color: rgba(255, 255, 255, 0.2);
+  --app-background: radial-gradient(circle at top left, rgba(103, 43, 224, 0.28), transparent 30%),
+    linear-gradient(135deg, #0f0c18 0%, #171124 55%, #0b0910 100%);
+  --panel-color: rgba(24, 18, 37, 0.92);
+  --control-background: rgba(255, 255, 255, 0.1);
+  --control-hover-background: rgba(255, 255, 255, 0.16);
+  --completed-text: rgba(199, 191, 220, 0.72);
+  --danger-color: #ff6363;
+  --soft-glow: 0 0 18px rgba(255, 255, 255, 0.12);
+  --primary-glow: 0 0 22px rgba(103, 43, 224, 0.42);
+  --panel-shadow: 0 24px 70px rgba(0, 0, 0, 0.38), var(--soft-glow);
+}
+
+[data-theme="light"] {
+  --primary-dark: #4f1fb4;
+  --text-color: #22212a;
+  --subtle-text: #7a7488;
+  --label-color: #672be0;
+  --line-color: #e6e1ef;
+  --app-background: #f6f4fb;
+  --panel-color: #ffffff;
+  --control-background: #f0edf7;
+  --control-hover-background: #e6def8;
+  --completed-text: #7a7488;
+  --danger-color: #d93838;
+  --soft-glow: 0 18px 45px rgba(48, 36, 74, 0.08);
+  --primary-glow: 0 0 0 rgba(103, 43, 224, 0);
+  --panel-shadow: var(--soft-glow);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -7,4 +43,8 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+}
+
+main[data-theme] {
+  background: var(--app-background);
 }

@@ -17,8 +17,8 @@ export function FilterTabs({ currentFilter, onChangeFilter }) {
             aria-pressed={isActive}
             className={`min-h-10 rounded-lg border font-bold ${
               isActive
-                ? "border-[#672be0] bg-[#672be0] text-white shadow-[0_0_22px_rgba(103,43,224,0.42)]"
-                : "border-white/20 bg-white/10 text-[#f8f6ff]"
+                ? "border-[var(--primary-color)] bg-[var(--primary-color)] text-white shadow-[var(--primary-glow)]"
+                : "border-[var(--line-color)] bg-[var(--control-background)] text-[var(--text-color)]"
             }`}
             onClick={() => onChangeFilter(filter.value)}
           >

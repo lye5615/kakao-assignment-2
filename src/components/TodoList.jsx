@@ -3,7 +3,7 @@ import { TodoItem } from "./TodoItem.jsx";
 export function TodoList({ todos, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
   if (todos.length === 0) {
     return (
-      <p className="rounded-lg border border-dashed border-white/20 px-4 py-7 text-center text-[#c7bfdc]">
+      <p className="rounded-lg border border-dashed border-[var(--line-color)] px-4 py-7 text-center text-[var(--subtle-text)]">
         선택한 날짜에 등록된 Todo가 없습니다.
       </p>
     );
