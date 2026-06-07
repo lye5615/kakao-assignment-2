@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { createTodoId, getFilteredTodos, getTodoCountsByDate } from "../utils/todo.js";
 import { getTodayDateValue, getWeekDateValues, getWeekStartDateValue, moveDateByDays } from "../utils/date.js";
 
-const TODO_STORAGE_KEY = "todo-vanilla-items";
+const TODO_STORAGE_KEY = "todo-react-items";
 
 function loadStoredTodos() {
   const storedTodos = localStorage.getItem(TODO_STORAGE_KEY);
@@ -12,7 +12,13 @@ function loadStoredTodos() {
   }
 
   try {
-    return JSON.parse(storedTodos).map((todo) => ({
+    const parsedTodos = JSON.parse(storedTodos);
+
+    if (!Array.isArray(parsedTodos)) {
+      return [];
+    }
+
+    return parsedTodos.map((todo) => ({
       ...todo,
       date: todo.date || getTodayDateValue(),
     }));
