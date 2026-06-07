@@ -1,5 +1,10 @@
 import { useState } from "react";
 
+const neutralActionButtonClass =
+  "rounded-lg border border-[var(--line-color)] bg-[var(--control-background)] px-3 py-2 font-bold";
+const activeCompleteButtonClass =
+  "rounded-lg border border-[var(--primary-color)] bg-[var(--primary-color)] px-3 py-2 font-bold text-white shadow-[var(--primary-glow)]";
+
 export function TodoItem({ todo, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
@@ -66,23 +71,28 @@ export function TodoItem({ todo, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
     );
   }
 
+  const completeButtonClass = todo.isCompleted
+    ? activeCompleteButtonClass
+    : neutralActionButtonClass;
+
   return (
     <li className="grid gap-3 rounded-lg border border-[var(--line-color)] bg-[var(--control-background)] p-3 sm:grid-cols-[1fr_auto]">
       <span className={`whitespace-pre-wrap leading-normal ${todo.isCompleted ? "text-[var(--completed-text)] line-through" : ""}`}>
         {todo.text}
       </span>
       <div className="flex gap-2">
-        <button className="rounded-lg bg-[var(--control-background)] px-3 py-2 font-bold" type="button" onClick={openEditMode}>
+        <button className={neutralActionButtonClass} type="button" onClick={openEditMode}>
           수정
         </button>
         <button
-          className={`rounded-lg px-3 py-2 font-bold ${todo.isCompleted ? "bg-[var(--primary-color)] text-white shadow-[var(--primary-glow)]" : "bg-[var(--control-background)]"}`}
+          className={completeButtonClass}
           type="button"
+          aria-pressed={todo.isCompleted}
           onClick={() => onToggleTodo(todo.id)}
         >
           {todo.isCompleted ? "취소" : "완료"}
         </button>
-        <button className="rounded-lg bg-[var(--control-background)] px-3 py-2 font-bold" type="button" onClick={() => onDeleteTodo(todo.id)}>
+        <button className={neutralActionButtonClass} type="button" onClick={() => onDeleteTodo(todo.id)}>
           삭제
         </button>
       </div>
