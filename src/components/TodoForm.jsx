@@ -11,6 +11,7 @@ export function TodoForm({ onAddTodo }) {
   const [todoText, setTodoText] = useState("");
   const [guideIndex, setGuideIndex] = useState(0);
   const [message, setMessage] = useState("");
+  const [isComposingTodoText, setIsComposingTodoText] = useState(false);
 
   const moveGuideMessage = () => {
     setGuideIndex((currentIndex) => (currentIndex + 1) % GUIDE_MESSAGES.length);
@@ -31,6 +32,18 @@ export function TodoForm({ onAddTodo }) {
     moveGuideMessage();
   };
 
+  const handleTodoInputKeyDown = (event) => {
+    const isComposingText =
+      event.isComposing || isComposingTodoText || event.keyCode === 229;
+
+    if (event.key !== "Enter" || event.shiftKey || isComposingText) {
+      return;
+    }
+
+    event.preventDefault();
+    event.currentTarget.form.requestSubmit();
+  };
+
   return (
     <form className="grid gap-2 sm:grid-cols-[1fr_92px]" onSubmit={handleSubmit}>
       <label className="sr-only" htmlFor="todoInput">
@@ -43,6 +56,9 @@ export function TodoForm({ onAddTodo }) {
         placeholder={GUIDE_MESSAGES[guideIndex]}
         value={todoText}
         onChange={(event) => setTodoText(event.target.value)}
+        onCompositionStart={() => setIsComposingTodoText(true)}
+        onCompositionEnd={() => setIsComposingTodoText(false)}
+        onKeyDown={handleTodoInputKeyDown}
       />
       <button className="rounded-lg bg-[#672be0] font-bold text-white" type="submit">
         추가
