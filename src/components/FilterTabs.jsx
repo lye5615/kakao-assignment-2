@@ -14,6 +14,7 @@ export function FilterTabs({ currentFilter, onChangeFilter }) {
           <button
             key={filter.value}
             type="button"
+            aria-pressed={isActive}
             className={`min-h-10 rounded-lg border font-bold ${
               isActive
                 ? "border-[#672be0] bg-[#672be0] text-white shadow-[0_0_22px_rgba(103,43,224,0.42)]"

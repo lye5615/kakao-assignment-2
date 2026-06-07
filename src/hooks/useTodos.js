@@ -67,6 +67,10 @@ export function useTodos() {
     );
   };
 
+  const changeFilter = (nextFilter) => {
+    setCurrentFilter(nextFilter);
+  };
+
   const moveWeek = (weekAmount) => {
     setSelectedDate((currentDate) => {
       const currentWeekStart = getWeekStartDateValue(currentDate);
@@ -83,7 +87,7 @@ export function useTodos() {
     todoCountsByDate,
     actions: {
       addTodo,
-      changeFilter: setCurrentFilter,
+      changeFilter,
       deleteTodo,
       moveWeek,
       selectDate: setSelectedDate,
