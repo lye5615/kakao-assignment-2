@@ -4,15 +4,30 @@ export function TodoItem({ todo, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [editDate, setEditDate] = useState(todo.date);
+  const [editMessage, setEditMessage] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (!editText.trim() || !editDate) {
+      setEditMessage("수정할 Todo 내용과 날짜를 입력해주세요.");
       return;
     }
 
     onUpdateTodo(todo.id, editText.trim(), editDate);
+    setEditMessage("");
+    setIsEditing(false);
+  };
+
+  const openEditMode = () => {
+    setEditText(todo.text);
+    setEditDate(todo.date);
+    setEditMessage("");
+    setIsEditing(true);
+  };
+
+  const closeEditMode = () => {
+    setEditMessage("");
     setIsEditing(false);
   };
 
@@ -38,11 +53,14 @@ export function TodoItem({ todo, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
             <button
               className="rounded-lg bg-white/10 px-3 font-bold"
               type="button"
-              onClick={() => setIsEditing(false)}
+              onClick={closeEditMode}
             >
               취소
             </button>
           </div>
+          {editMessage && (
+            <p className="text-sm font-bold text-[#ff6363] sm:col-span-3">{editMessage}</p>
+          )}
         </form>
       </li>
     );
@@ -54,7 +72,7 @@ export function TodoItem({ todo, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
         {todo.text}
       </span>
       <div className="flex gap-2">
-        <button className="rounded-lg bg-white/10 px-3 py-2 font-bold" type="button" onClick={() => setIsEditing(true)}>
+        <button className="rounded-lg bg-white/10 px-3 py-2 font-bold" type="button" onClick={openEditMode}>
           수정
         </button>
         <button
