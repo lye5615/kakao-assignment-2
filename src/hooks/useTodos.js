@@ -3,6 +3,7 @@ import { createTodoId, getFilteredTodos, getTodoCountsByDate } from "../utils/to
 import { getTodayDateValue, getWeekDateValues, getWeekStartDateValue, moveDateByDays } from "../utils/date.js";
 
 const TODO_STORAGE_KEY = "todo-react-items";
+const TODO_VIEW_STORAGE_KEY = "todo-react-view";
 
 function loadStoredTodos() {
   const storedTodos = localStorage.getItem(TODO_STORAGE_KEY);
@@ -27,19 +28,56 @@ function loadStoredTodos() {
   }
 }
 
+function loadStoredViewState() {
+  const todayDate = getTodayDateValue();
+  const fallbackViewState = {
+    selectedDate: todayDate,
+    weekStartDate: getWeekStartDateValue(todayDate),
+  };
+  const storedViewState = localStorage.getItem(TODO_VIEW_STORAGE_KEY);
+
+  if (!storedViewState) {
+    return fallbackViewState;
+  }
+
+  try {
+    const parsedViewState = JSON.parse(storedViewState);
+    const selectedDate = parsedViewState.selectedDate || fallbackViewState.selectedDate;
+    const weekStartDate = parsedViewState.weekStartDate || getWeekStartDateValue(selectedDate);
+
+    return {
+      selectedDate,
+      weekStartDate,
+    };
+  } catch {
+    return fallbackViewState;
+  }
+}
+
 export function useTodos() {
+  const [storedViewState] = useState(loadStoredViewState);
   const [todos, setTodos] = useState(loadStoredTodos);
-  const [selectedDate, setSelectedDate] = useState(getTodayDateValue);
+  const [selectedDate, setSelectedDate] = useState(storedViewState.selectedDate);
+  const [weekStartDate, setWeekStartDate] = useState(storedViewState.weekStartDate);
   const [currentFilter, setCurrentFilter] = useState("all");
 
-  const selectedWeekStart = useMemo(() => getWeekStartDateValue(selectedDate), [selectedDate]);
-  const selectedWeekDates = useMemo(() => getWeekDateValues(selectedWeekStart), [selectedWeekStart]);
+  const selectedWeekDates = useMemo(() => getWeekDateValues(weekStartDate), [weekStartDate]);
   const filteredTodos = useMemo(() => getFilteredTodos(todos, selectedDate, currentFilter), [todos, selectedDate, currentFilter]);
   const todoCountsByDate = useMemo(() => getTodoCountsByDate(todos), [todos]);
 
   useEffect(() => {
     localStorage.setItem(TODO_STORAGE_KEY, JSON.stringify(todos));
   }, [todos]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      TODO_VIEW_STORAGE_KEY,
+      JSON.stringify({
+        selectedDate,
+        weekStartDate,
+      })
+    );
+  }, [selectedDate, weekStartDate]);
 
   const addTodo = (text) => {
     setTodos((currentTodos) => [
@@ -78,15 +116,22 @@ export function useTodos() {
   };
 
   const moveWeek = (weekAmount) => {
-    setSelectedDate((currentDate) => {
-      const currentWeekStart = getWeekStartDateValue(currentDate);
+    const nextWeekStartDate = moveDateByDays(weekStartDate, weekAmount * 7);
 
-      return moveDateByDays(currentWeekStart, weekAmount * 7);
-    });
+    setWeekStartDate(nextWeekStartDate);
+    setSelectedDate(nextWeekStartDate);
   };
 
   const moveDate = (dayAmount) => {
-    setSelectedDate((currentDate) => moveDateByDays(currentDate, dayAmount));
+    const nextDate = moveDateByDays(selectedDate, dayAmount);
+
+    setSelectedDate(nextDate);
+    setWeekStartDate(getWeekStartDateValue(nextDate));
+  };
+
+  const selectDate = (nextDate) => {
+    setSelectedDate(nextDate);
+    setWeekStartDate(getWeekStartDateValue(nextDate));
   };
 
   return {
@@ -101,7 +146,7 @@ export function useTodos() {
       deleteTodo,
       moveDate,
       moveWeek,
-      selectDate: setSelectedDate,
+      selectDate,
       toggleTodo,
       updateTodo,
     },
