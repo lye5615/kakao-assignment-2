@@ -18,7 +18,11 @@ export default function App() {
   return (
     <main className="min-h-screen bg-[#0f0c18] px-4 py-8 text-[#f8f6ff]">
       <section className="mx-auto w-full max-w-3xl rounded-lg border border-white/20 bg-[#181225]/90 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.38)]">
-        <AppHeader />
+        <AppHeader
+          selectedDate={selectedDate}
+          onMoveDate={actions.moveDate}
+          onSelectDate={actions.selectDate}
+        />
         <WeekView
           selectedDate={selectedDate}
           selectedWeekDates={selectedWeekDates}

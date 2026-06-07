@@ -79,6 +79,10 @@ export function useTodos() {
     });
   };
 
+  const moveDate = (dayAmount) => {
+    setSelectedDate((currentDate) => moveDateByDays(currentDate, dayAmount));
+  };
+
   return {
     currentFilter,
     filteredTodos,
@@ -89,6 +93,7 @@ export function useTodos() {
       addTodo,
       changeFilter,
       deleteTodo,
+      moveDate,
       moveWeek,
       selectDate: setSelectedDate,
       toggleTodo,
