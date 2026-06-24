@@ -5,8 +5,15 @@ const neutralActionButtonClass =
 const activeCompleteButtonClass =
   "rounded-lg border border-[var(--primary-color)] bg-[var(--primary-color)] px-3 py-2 font-bold text-white shadow-[var(--primary-glow)]";
 
-export function TodoItem({ todo, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
-  const [isEditing, setIsEditing] = useState(false);
+export function TodoItem({
+  isEditing,
+  todo,
+  onDeleteTodo,
+  onStartEditingTodo,
+  onStopEditingTodo,
+  onToggleTodo,
+  onUpdateTodo,
+}) {
   const [editText, setEditText] = useState(todo.text);
   const [editDate, setEditDate] = useState(todo.date);
   const [editMessage, setEditMessage] = useState("");
@@ -21,19 +28,18 @@ export function TodoItem({ todo, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
 
     onUpdateTodo(todo.id, editText.trim(), editDate);
     setEditMessage("");
-    setIsEditing(false);
   };
 
   const openEditMode = () => {
     setEditText(todo.text);
     setEditDate(todo.date);
     setEditMessage("");
-    setIsEditing(true);
+    onStartEditingTodo(todo.id);
   };
 
   const closeEditMode = () => {
     setEditMessage("");
-    setIsEditing(false);
+    onStopEditingTodo();
   };
 
   if (isEditing) {

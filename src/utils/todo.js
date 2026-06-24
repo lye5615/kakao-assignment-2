@@ -22,9 +22,7 @@ export function getFilteredTodos(todos, selectedDate, currentFilter) {
 
 export function getTodoCountsByDate(todos) {
   return todos.reduce((countsByDate, todo) => {
-    return {
-      ...countsByDate,
-      [todo.date]: (countsByDate[todo.date] || 0) + 1,
-    };
+    countsByDate[todo.date] = (countsByDate[todo.date] || 0) + 1;
+    return countsByDate;
   }, {});
 }

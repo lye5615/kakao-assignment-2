@@ -60,6 +60,7 @@ export function useTodos() {
   const [selectedDate, setSelectedDate] = useState(storedViewState.selectedDate);
   const [weekStartDate, setWeekStartDate] = useState(storedViewState.weekStartDate);
   const [currentFilter, setCurrentFilter] = useState("all");
+  const [editingId, setEditingId] = useState(null);
 
   const selectedWeekDates = useMemo(() => getWeekDateValues(weekStartDate), [weekStartDate]);
   const filteredTodos = useMemo(() => getFilteredTodos(todos, selectedDate, currentFilter), [todos, selectedDate, currentFilter]);
@@ -93,6 +94,7 @@ export function useTodos() {
 
   const deleteTodo = (todoId) => {
     setTodos((currentTodos) => currentTodos.filter((todo) => todo.id !== todoId));
+    setEditingId((currentEditingId) => (currentEditingId === todoId ? null : currentEditingId));
   };
 
   const toggleTodo = (todoId) => {
@@ -109,10 +111,12 @@ export function useTodos() {
         todo.id === todoId ? { ...todo, text: nextText, date: nextDate } : todo
       )
     );
+    setEditingId(null);
   };
 
   const changeFilter = (nextFilter) => {
     setCurrentFilter(nextFilter);
+    setEditingId(null);
   };
 
   const moveWeek = (weekAmount) => {
@@ -120,6 +124,7 @@ export function useTodos() {
 
     setWeekStartDate(nextWeekStartDate);
     setSelectedDate(nextWeekStartDate);
+    setEditingId(null);
   };
 
   const moveDate = (dayAmount) => {
@@ -127,15 +132,26 @@ export function useTodos() {
 
     setSelectedDate(nextDate);
     setWeekStartDate(getWeekStartDateValue(nextDate));
+    setEditingId(null);
   };
 
   const selectDate = (nextDate) => {
     setSelectedDate(nextDate);
     setWeekStartDate(getWeekStartDateValue(nextDate));
+    setEditingId(null);
+  };
+
+  const startEditingTodo = (todoId) => {
+    setEditingId(todoId);
+  };
+
+  const stopEditingTodo = () => {
+    setEditingId(null);
   };
 
   return {
     currentFilter,
+    editingId,
     filteredTodos,
     selectedDate,
     selectedWeekDates,
@@ -147,6 +163,8 @@ export function useTodos() {
       moveDate,
       moveWeek,
       selectDate,
+      startEditingTodo,
+      stopEditingTodo,
       toggleTodo,
       updateTodo,
     },

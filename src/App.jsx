@@ -16,6 +16,7 @@ export default function App() {
   const [theme, setTheme] = useState(loadStoredTheme);
   const {
     currentFilter,
+    editingId,
     filteredTodos,
     selectedDate,
     selectedWeekDates,
@@ -66,8 +67,11 @@ export default function App() {
           </div>
           <FilterTabs currentFilter={currentFilter} onChangeFilter={actions.changeFilter} />
           <TodoList
+            editingId={editingId}
             todos={filteredTodos}
             onDeleteTodo={actions.deleteTodo}
+            onStartEditingTodo={actions.startEditingTodo}
+            onStopEditingTodo={actions.stopEditingTodo}
             onToggleTodo={actions.toggleTodo}
             onUpdateTodo={actions.updateTodo}
           />

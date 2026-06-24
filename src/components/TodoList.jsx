@@ -1,6 +1,14 @@
 import { TodoItem } from "./TodoItem.jsx";
 
-export function TodoList({ todos, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
+export function TodoList({
+  editingId,
+  todos,
+  onDeleteTodo,
+  onStartEditingTodo,
+  onStopEditingTodo,
+  onToggleTodo,
+  onUpdateTodo,
+}) {
   if (todos.length === 0) {
     return (
       <p className="rounded-lg border border-dashed border-[var(--line-color)] px-4 py-7 text-center text-[var(--subtle-text)]">
@@ -14,8 +22,11 @@ export function TodoList({ todos, onDeleteTodo, onToggleTodo, onUpdateTodo }) {
       {todos.map((todo) => (
         <TodoItem
           key={todo.id}
+          isEditing={editingId === todo.id}
           todo={todo}
           onDeleteTodo={onDeleteTodo}
+          onStartEditingTodo={onStartEditingTodo}
+          onStopEditingTodo={onStopEditingTodo}
           onToggleTodo={onToggleTodo}
           onUpdateTodo={onUpdateTodo}
         />
